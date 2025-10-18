@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Believer Deck</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    #app {
+      text-align: center;
+      max-width: 90vw;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+    }
+    #nav {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="cover-screen">
+    <img src="assets/cover.png" alt="Cover" />
+    <button onclick="startApp()">Start</button>
+  </div>
+
+  <div id="instructions-screen" class="hidden">
+    <img src="assets/instructions.png" alt="Instructions" />
+    <button onclick="showCover()">Back</button>
+  </div>
+
+  <div id="deck-screen" class="hidden">
+    <div id="card-display">
+      <img id="card-image" src="assets/card_back.png" alt="Card" onclick="flipCard()" />
+    </div>
+    <div id="nav">
+      <button onclick="prevCard()">Previous</button>
+      <button onclick="shuffleCard()">Draw Random</button>
+      <button onclick="nextCard()">Next</button>
+    </div>
+    <button onclick="showInstructions()">Instructions</button>
+  </div>
+</div>
+
+<script>
+  const cardImage = document.getElementById("card-image");
+  const cardBack = "assets/card_back.png";
+  const totalCards = 50;
+  let currentCardIndex = 0;
+  let showingFront = false;
+
+  function startApp() {
+    document.getElementById("cover-screen").classList.add("hidden");
+    document.getElementById("deck-screen").classList.remove("hidden");
+    showCardBack();
+  }
+
+  function showCover() {
+    document.getElementById("instructions-screen").classList.add("hidden");
+    document.getElementById("cover-screen").classList.remove("hidden");
+    document.getElementById("deck-screen").classList.add("hidden");
+  }
+
+  function showInstructions() {
+    document.getElementById("deck-screen").classList.add("hidden");
+    document.getElementById("instructions-screen").classList.remove("hidden");
+  }
+
+  function showCardBack() {
+    showingFront = false;
+    cardImage.src = cardBack;
+  }
+
+  function flipCard() {
+    if (!showingFront) {
+      cardImage.src = `assets/card_${String(currentCardIndex + 1).padStart(2, '0')}.png`;
+      showingFront = true;
+    } else {
+      showCardBack();
+    }
+  }
+
+  function shuffleCard() {
+    currentCardIndex = Math.floor(Math.random() * totalCards);
+    showCardBack();
+  }
+
+  function nextCard() {
+    currentCardIndex = (currentCardIndex + 1) % totalCards;
+    showCardBack();
+  }
+
+  function prevCard() {
+    currentCardIndex = (currentCardIndex - 1 + totalCards) % totalCards;
+    showCardBack();
+  }
+</script>
+</body>
+</html>
